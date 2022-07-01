@@ -493,11 +493,11 @@ impl Json {
                 0x5C => product.push_str("\\\\"),
                 // b. Else if C has a numeric value less than 0x0020 (SPACE), or if C has the same numeric value as a leading surrogate or trailing surrogate, then
                 code_point
-                    if is_leading_surrogate(code_point) || is_trailing_surrogate(code_point) =>
+                    if code_point < 0x20 || is_leading_surrogate(code_point) || is_trailing_surrogate(code_point) =>
                 {
                     // i. Let unit be the code unit whose numeric value is that of C.
                     // ii. Set product to the string-concatenation of product and UnicodeEscape(unit).
-                    product.push_str(&format!("\\\\uAA{code_point:x}"));
+                    product.push_str(&format!("\\u{code_point:04x}"));
                 }
                 // c. Else,
                 code_point => {
